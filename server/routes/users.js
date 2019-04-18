@@ -24,6 +24,7 @@ var createHash = function (password) {
     return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 };
 
+//BROKEN COOKIE
 router.get('/', (req, res) => {
     if (req.session.username) {
         res.send(req.session.username);
@@ -121,7 +122,7 @@ router.post('/newbook',(req,res) => {
         });
 });
 
-//grab books BROKEN 500
+//grab books BROKEN 500 issue with my cookie data
 router.get('/search', (req, res) => {
     UserCollection.findOne({username:req.session.username}, (errors, results) => {
         if (errors) {
@@ -134,5 +135,9 @@ router.get('/search', (req, res) => {
     })
 });
 
+//NEW LOGOUT
+router.get('/logout', (req, res) => {
+    req.session.username = null
+});
 
 module.exports = router;

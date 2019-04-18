@@ -20,12 +20,13 @@ class App extends Component {
     loggedInUser = (username,isLoggedIn) => {
         this.setState({
             username:username,isLoggedIn:isLoggedIn
-        })
+        });
     };
 
     //log out on click event handler
     logOutUser = () =>{
-        this.setState({username:null, isLoggedIn:false})
+        this.setState({username:null, isLoggedIn:false});
+        return fetch('/users/logout');
     };
 
     render() {

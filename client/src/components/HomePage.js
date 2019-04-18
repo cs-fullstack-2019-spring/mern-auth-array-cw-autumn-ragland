@@ -54,11 +54,8 @@ class HomePage extends Component {
     //grab user books BROKEN?
     bookFetch = () => {
         fetch('/users/search')
-            .then(()=>console.log('book search'))
-            .then(data => data.json())
+            .then(data => data.text())
             .then(data => this.setState({bookArray:data.books}, () => this.mapBooks()))
-
-
     };
 
     //map user books BROKEN?
