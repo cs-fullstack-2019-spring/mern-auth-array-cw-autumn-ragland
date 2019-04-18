@@ -23,13 +23,9 @@ class App extends Component {
         })
     };
 
-    //log out onClick that doesnt work bc I'm not passing the state of the username and is logged in to the children
+    //log out on click event handler
     logOutUser = () =>{
-        console.log("logout the user");
-        fetch('/users/logout')
-            .then(data=>{return data.text()})
-            .then(data=>console.log(data))
-            .then(()=>this.loggedInUser(undefined, false))
+        this.setState({username:null, isLoggedIn:false})
     };
 
     render() {
@@ -39,13 +35,13 @@ class App extends Component {
           <Router>
               <div className="App">
                   <h1>Books</h1>
-                  <Link to={'/'}>Home</Link>
-                  <Link to={'/newUser'}>Register</Link>
-                  <Link to={'/logout'} onClick={this.logOutUser}>Logout</Link>
+                  <Link className={"linkStyle"} to={'/'}>Home</Link>
+                  <Link className={"linkStyle"} to={'/newUser'}>Register</Link>
+                  <Link className={"linkStyle"} to={'/logout'} onClick={this.logOutUser}>Logout</Link>
               </div>
               <Route path={'/newUser'} component={NewUser}/>
               <Route path={'/logout'} component={LogOut}/>
-              <Route exact path={'/'} component={()=>{return <HomePage loggedInUser={this.loggedInUser} />} }/>
+              <Route exact path={'/'} component={()=>{return <HomePage loggedInUser={this.loggedInUser} username={this.state.username} />} }/>
           </Router>
       </div>
     );

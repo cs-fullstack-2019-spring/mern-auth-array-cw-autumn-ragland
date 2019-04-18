@@ -16,7 +16,7 @@ class NewUser extends Component {
                 password: e.target.password.value,
             })
         })
-            .then(data => data.JSON)
+            .then(data => data.text())
             .then(returnedData => console.log(returnedData))
     };
 

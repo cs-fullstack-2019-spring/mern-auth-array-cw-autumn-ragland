@@ -5,7 +5,7 @@ class LogOut extends Component {
         return (
             //logout message
             <div className="App">
-                <h1>This is a logout message</h1>
+                <h1>Click HOME to login</h1>
             </div>
         );
     }

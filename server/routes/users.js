@@ -25,9 +25,6 @@ var createHash = function (password) {
 };
 
 router.get('/', (req, res) => {
-    console.log(req.session);
-    console.log(req.session.username);
-
     if (req.session.username) {
         res.send(req.session.username);
         console.log(req.session.username)
@@ -59,7 +56,6 @@ passport.use('signup', new LocalStrategy(
                       if(errors){
                           throw errors;
                       }
-                      console.log('User created!');
                       return done(null,newUser);
                   });
               }
@@ -74,7 +70,6 @@ router.post('/newuser',
     passport.authenticate('signup',
         {failureRedirect: '/users/failNewUser'}
     ),(req,res) => {
-    console.log(req.body);
     res.send("Authenticated")
     });
 router.get('/failNewUser', (req, res)=>{
@@ -126,12 +121,17 @@ router.post('/newbook',(req,res) => {
         });
 });
 
-//grab books
-router.get('/booksearch',(req,res) => {
-   UserCollection.findOne({username:req.session.username},(errors,results)=>{
-       if(errors) res.send(errors);
-       else res.send(results)
-   })
+//grab books BROKEN 500
+router.get('/search', (req, res) => {
+    UserCollection.findOne({username:req.session.username}, (errors, results) => {
+        if (errors) {
+            res.send(errors);
+            console.log('search fail')
+        } else {
+            res.send(results);
+            console.log(results)
+        }
+    })
 });
 
 

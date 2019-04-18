@@ -6,10 +6,8 @@ class HomePage extends Component {
         super(props);
         this.state = {
             message: '',
-            username: null,
-            isLoggedIn: false,
             bookArray: [],
-            bookMap: ""
+            mapArray: [],
         }
     }
 
@@ -22,21 +20,8 @@ class HomePage extends Component {
         fetch('/users')
             .then(data => data.text())
             .then(response => {
-                if (response) {
-                    this.setState(
-                        {
-                            username: response,
-                            isLoggedIn: true,
-                        });
-                }
-                else {
-                    this.setState({
-                            logInfo: {
-                                username: undefined,
-                                loggedIn: false,
-                            }
-                        });
-                }
+                if (response) { this.props.loggedInUser(response,true)}
+                else {this.props.loggedInUser(null,false)}
             });
     }
 
@@ -57,34 +42,48 @@ class HomePage extends Component {
             .then(data => data.text())
             .then(returnedData => {
                 if (returnedData) {
-                    this.setState({username: returnedData})
+                    this.props.loggedInUser(returnedData,true);
+                    // this.bookFetch()
                 } else {
-                    this.setState({message: "Login Failed"})
+                    this.props.loggedInUser(null,false)
                 }
             })
 
     };
 
-    //grab user books
+    //grab user books BROKEN?
     bookFetch = () => {
-        fetch('/users/booksearch')
+        fetch('/users/search')
+            .then(()=>console.log('book search'))
             .then(data => data.json())
-            .then(data => console.log(data))
-        // .then(() => this.mapBooks())
+            .then(data => this.setState({bookArray:data.books}, () => this.mapBooks()))
 
 
     };
 
     //map user books BROKEN?
-    // mapBooks = () => {
-    //     let bookMap = this.state.bookArray.map((eachBook) => {
-    //         return (
-    //             <div>
-    //                 <p>Title: {eachBook}</p>
-    //             </div>
-    //         )
-    //     });
-    // };
+    mapBooks(){
+        let mapArray = [];
+        console.log(this.state.bookArray);
+        let tempArray = [];
+        if(this.state.bookArray)
+            tempArray = this.state.bookArray;
+        if(tempArray.length>0) {
+            mapArray = this.state.bookArray.map(
+                (eachElement, index) => {
+                    return (<div key={index}>
+                        <p>{eachElement}</p>
+                    </div>)
+                }
+            );
+            console.log(mapArray);
+        }
+        else {
+            console.log("no books");
+            mapArray = [];
+        }
+        this.setState({bookArray:mapArray});
+    }
 
     //add a book
     bookFormSubmit = (e) => {
@@ -96,7 +95,7 @@ class HomePage extends Component {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                username: this.state.username,
+                username: this.props.username,
                 books: e.target.books.value,
             })
         })
@@ -104,12 +103,11 @@ class HomePage extends Component {
 
     render() {
         //if the user is logged in
-        if (this.state.username) {
-            // this.bookFetch();
+        if (this.props.username) {
             //list books and add a book form
             return (
                 <div>
-                    <h1>Welcome Back {this.state.username}</h1>
+                    <h1>Welcome Back {this.props.username}</h1>
 
                     <form className={"formStyle"} onSubmit={this.bookFormSubmit}>
                         <div>
@@ -123,7 +121,7 @@ class HomePage extends Component {
                     </form>
                     <div>
                         <h3>Your Books</h3>
-                        {/*{this.state.bookArray}*/}
+                        {this.state.bookArray}
                     </div>
                 </div>
 
