@@ -9,3 +9,5 @@ Create the following pages:
 - Log Out: Log out the user.
 
 Make sure to use cookies, and salt/hash your passwords.
+<hr>
+1.5 points. Cookies are not working and not pulling up the array of items.
